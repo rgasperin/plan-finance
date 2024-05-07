@@ -13,3 +13,6 @@
     align-items: center;
 }
 
+.img-fluid {
+    height: 55px;
+}

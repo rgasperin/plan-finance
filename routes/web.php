@@ -16,6 +16,8 @@ use App\Http\Controllers\CategoryController;
 */
 
 Route::get('/', [FinanceController::class, 'index']);
+Route::get('entradas', [FinanceController::class, 'index']);
+Route::get('despesas', [FinanceController::class, 'index']);
 
 
 
