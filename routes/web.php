@@ -16,10 +16,16 @@ use App\Http\Controllers\CategoryController;
 */
 
 Route::get('/', [FinanceController::class, 'index']);
-Route::get('entradas', [FinanceController::class, 'index']);
-Route::get('despesas', [FinanceController::class, 'index']);
 
+Route::get('entrada', [FinanceController::class, 'index']);
 
+// Despesas
+Route::get('despesa', [FinanceController::class, 'spentMoney']);
+Route::get('despesa/create',[FinanceController::class, 'create'] );
+Route::post('despesa', [FinanceController::class, 'store']);
+Route::get('despesa/{id}/edit', [FinanceController::class, 'edit']);
+Route::put('despesa/{id}', [FinanceController::class, 'update']);
+Route::get('despesa/{id}', [FinanceController::class, 'show']);
 
 // Categoria
 Route::get('categoria', [CategoryController::class, 'index']);

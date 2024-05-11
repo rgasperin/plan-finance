@@ -1,7 +1,11 @@
-function openDeleteModal() {
-    document.getElementById("confirmModalDelete").style.display = "block";
-}
+$(document).ready(function () {
+    function openDeleteModal() {
+        $("#confirmModalDelete").css("display", "block");
+    }
 
-function closeDeleteModal() {
-    document.getElementById("confirmModalDelete").style.display = "none";
-}
+    function closeDeleteModal() {
+        $("#confirmModalDelete").css("display", "none");
+    }
+
+    $("#valor").mask("000.000.000.000.000,00", { reverse: true });
+});

@@ -16,3 +16,12 @@
 .img-fluid {
     height: 55px;
 }
+
+.margin-show {
+    margin-bottom: 5px !important;
+}
+
+.textarea-show {
+    height: 150px !important;
+    resize: none;
+}
