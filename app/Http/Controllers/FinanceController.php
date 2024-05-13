@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\AvailableMoney;
 use App\Models\SpentMoney;
 use App\Models\Category;
+use Carbon\Carbon;
 
 class FinanceController extends Controller
 {
@@ -28,6 +29,8 @@ class FinanceController extends Controller
 
     public function spentMoney()
     {
+        $carbon = new Carbon();
+
         $finance = $this->objSpentMoney->all();
         $availableMoney = $this->objAvailableMoney->all();
 
@@ -36,9 +39,7 @@ class FinanceController extends Controller
 
         $diff = $moneySpend - $financeValue;
 
-        dd($finance);
-
-        return view('spent_money', compact('finance', 'availableMoney', 'diff'));
+        return view('spent_money.index', compact('finance', 'availableMoney', 'diff', 'carbon'));
     }
 
     public function create()
@@ -46,7 +47,7 @@ class FinanceController extends Controller
         $category = $this->objCategory->all();
         $availableMoney = $this->objAvailableMoney->all();
 
-        return view('create', compact('category', 'availableMoney'));
+        return view('spent_money.create', compact('category', 'availableMoney'));
     }
 
     public function store(Request $request)
@@ -83,7 +84,7 @@ class FinanceController extends Controller
     {
         $finance = $this->objSpentMoney->find($id);
 
-        return view('show', compact('finance'));
+        return view('spent_money.show', compact('finance'));
     }
 
     public function edit($id)
@@ -92,7 +93,7 @@ class FinanceController extends Controller
         $category = $this->objCategory->all();
         $availableMoney = $this->objAvailableMoney->all();
 
-        return view('create', compact('finance', 'category', 'availableMoney'));
+        return view('spent_money.create', compact('finance', 'category', 'availableMoney'));
     }
 
     public function update(Request $request, $id)
@@ -115,5 +116,19 @@ class FinanceController extends Controller
 
     public function destroy($id)
     {
+        $finance = SpentMoney::findOrFail($id);
+
+        $finance->delete();
+        
+        return redirect('despesa');
+    }
+
+    public function search(Request $request) 
+    {
+        $filters = $request->except('_token');
+
+        $finance = $this->objSpentMoney->where('name', 'like' , '%' . $request->search .'%')->paginate(5);
+
+        return view('spent_money.index', compact('finance', 'filters'));
     }
 }
