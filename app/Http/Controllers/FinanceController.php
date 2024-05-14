@@ -46,10 +46,17 @@ class FinanceController extends Controller
     {
         $date = Carbon::now();
 
-        $category = $this->objCategory->all();
-        $availableMoney = $this->objAvailableMoney->all();
+        $finances = $this->objSpentMoney->all();
 
-        return view('spent_money.create', compact('category', 'availableMoney', 'date'));
+        $categories = $this->objCategory->all();
+        $availableMoneys = $this->objAvailableMoney->all();
+
+        $financeValue = $finances->sum('value');
+        $moneySpend = $availableMoneys->sum('to_spend');
+
+        $diff = $moneySpend - $financeValue;
+
+        return view('spent_money.create', compact('categories', 'availableMoneys', 'date', 'diff'));
     }
 
     public function store(Request $request)
@@ -104,8 +111,13 @@ class FinanceController extends Controller
         $finance = $this->objSpentMoney->find($id);
         $categories = $this->objCategory->all();
         $availableMoneys = $this->objAvailableMoney->all();
+        
+        $financeValue = $finance->sum('value');
+        $moneySpend = $availableMoneys->sum('to_spend');
 
-        return view('spent_money.create', compact('finance', 'categories', 'availableMoneys'));
+        $diff = $moneySpend - $financeValue;
+
+        return view('spent_money.create', compact('finance', 'categories', 'availableMoneys', 'diff'));
     }
 
     public function update(Request $request, $id)

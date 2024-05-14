@@ -25,64 +25,76 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 mt-3">
-                    <table class="table table-bg table-hover">
-                        <thead class="table-dark-bg">
-                            <tr>
-                                <th class="padding-card">Nome</th>
-                                <th>Categoria</th>
-                                <th>Valor</th>
-                                <th>Data</th>
-                                <th class="d-flex justify-content-end padding-card">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($finances->isEmpty())
-                                <table>
-                                    <p class="text-center">Nenhum resultado encontrado!</p>
-                                </table>
-                            @else
-                                @foreach ($finances as $finance)
-                                    @php
-                                        $category = $finance->find($finance->id)->relCategory;
-                                        $availableMoney = $finance->find($finance->id)->relAvailableMoney;
-                                        $date = $carbon::parse($finance->date)->format('d/m/Y');
-                                    @endphp
-                                    <tr>
-                                        <td>{{ $finance->name }}</td>
-                                        <td>
-                                            <i class="fi fi-ss-circle me-1" style="color:{{ $category->color }}"></i>
-                                            {{ $category->name ?? 'Sem Categoria' }}
-                                        </td>
-                                        <td>R$ {{ number_format($finance->value, 2, '.', ',') }}</td>
-                                        <td>{{ $date }}</td>
-                                        <td class="d-flex justify-content-end">
-                                            <a class="text-decoration-none" href="{{ url('despesa/' . $finance->id) }}">
-                                                <button class="btn btn-dark btn-view">
-                                                    <i class="fi fi-rr-eye btn-icon"></i>
-                                                </button>
-                                            </a>
+                    <div class="card p-0">
+                        <table class="table table-bg table-hover">
+                            <thead class="table-dark-bg">
+                                <tr>
+                                    <th class="padding-card">Nome</th>
+                                    <th class="padding-card">Categoria</th>
+                                    <th class="padding-card">Valor</th>
+                                    <th class="padding-card">Data</th>
+                                    <th class="padding-card text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($finances->isEmpty())
+                                    <table>
+                                        <p class="text-center">Nenhum resultaho encontrado!</p>
+                                    </table>
+                                @else
+                                    @foreach ($finances as $finance)
+                                        @php
+                                            $category = $finance->find($finance->id)->relCategory;
+                                            $availableMoney = $finance->find($finance->id)->relAvailableMoney;
+                                            $date = $carbon::parse($finance->date)->format('d/m/Y');
+                                        @endphp
+                                        <tr>
+                                            <td class="padding-table">
+                                                <p class="mt-3"> {{ $finance->name }}</p>
+                                            </td>
+                                            <td class="padding-table">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fi fi-ss-circle" style="color:{{ $category->color }}"></i>
+                                                    <p class="ms-2 mt-3"> {{ $category->name ?? 'Sem Categoria' }} </p>
+                                                </div>
+                                            </td>
+                                            <td class="padding-table">
+                                                <p class="mt-3"> R$ {{ number_format($finance->value, 2, '.', ',') }} </p>
+                                            </td>
+                                            <td class="padding-table">
+                                                <p class="mt-3"> {{ $date }} </p>
+                                            </td>
+                                            <td class="padding-table">
+                                                <div class="mt-3 d-flex justify-content-end">
+                                                    <a class="text-decoration-none"
+                                                        href="{{ url('despesa/' . $finance->id) }}">
+                                                        <button class="btn btn-dark btn-view">
+                                                            <i class="fi fi-rr-eye btn-icon"></i>
+                                                        </button>
+                                                    </a>
 
-                                            <a class="ms-2 text-decoration-none"
-                                                href="{{ url('despesa/' . $finance->id) . '/edit' }}">
-                                                <button class="btn btn-primary btn-view">
-                                                    <i class="fi fi-rr-file-edit btn-icon"></i>
-                                                </button>
-                                            </a>
-
-                                            <form id="deleteForm" method="POST"
-                                                action="{{ url('despesa/' . $finance->id) }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="ms-2 btn btn-danger btn-view" type="submit">
-                                                    <i class="fi fi-rr-trash btn-icon"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                                    <a class="ms-2 text-decoration-none"
+                                                        href="{{ url('despesa/' . $finance->id) . '/edit' }}">
+                                                        <button class="btn btn-primary btn-view">
+                                                            <i class="fi fi-rr-file-edit btn-icon"></i>
+                                                        </button>
+                                                    </a>
+                                                    <form id="deleteForm" method="POST"
+                                                        action="{{ url('despesa/' . $finance->id) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="ms-2 btn btn-danger btn-view" type="submit">
+                                                            <i class="fi fi-rr-trash btn-icon"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

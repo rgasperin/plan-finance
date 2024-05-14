@@ -7,6 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Plano Financeiro</title>
 
+    <link href="{{ url('assets/imgs/logo.png') }}" rel="icon" />
+    <link href="{{ url('assets/imgs/logo.png') }}" rel="apple-touch-icon" />
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link

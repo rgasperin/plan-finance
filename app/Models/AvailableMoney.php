@@ -18,21 +18,11 @@ class AvailableMoney extends Model
     protected $fillable = [
         'name',
         'to_spend',
-        'total_value',
         'date',
         'created_at',
         'updated_at',
         'deleted_at'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        self::saving(function ($availableMoney) {
-            $availableMoney->total_value = $availableMoney->to_spend;
-        });
-    }
 
     public function relSpentMoney() {
         return $this->hasMany('App\Models\SpentMoney', 'available_money_id');

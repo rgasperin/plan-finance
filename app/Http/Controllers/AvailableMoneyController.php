@@ -52,7 +52,6 @@ class AvailableMoneyController extends Controller
         $availableMoney = $this->objAvailableMoney->create([
             'name' => $request->name,
             'to_spend' => $request->to_spend,
-            'total_value' => $request->total_value,
             'date' => $request->date,
         ]);
 
@@ -80,7 +79,6 @@ class AvailableMoneyController extends Controller
 
         $availableMoney->name = $request->name;
         $availableMoney->to_spend = $request->to_spend;
-        $availableMoney->total_value = $request->total_value;
         $availableMoney->date = $request->date;
 
         $availableMoney->save();
