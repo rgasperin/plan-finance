@@ -11,6 +11,8 @@ body {
 }
 
 .btn-view {
+    display: flex;
+    align-items: center;
     height: 35px;
 }
 
@@ -123,4 +125,20 @@ body {
 
 .form-control {
     border: 1px solid #f1f1f1 !important;
+}
+
+.form-control-bg {
+    background-color: #f1f1fe;
+}
+
+.ck-blurred p {
+    max-height: 230px !important;
+}
+
+.ck-focused p {
+    max-height: 230px !important;
+}
+
+.textarea-bg {
+    background-color: #f8f8f8;
 }

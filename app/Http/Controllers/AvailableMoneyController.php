@@ -18,9 +18,10 @@ class AvailableMoneyController extends Controller
     public function index()
     {
         $carbon = new Carbon();
-        $availableMoney = $this->objAvailableMoney->all();
 
-        return view('available_money.index', compact('availableMoney', 'carbon'));
+        $availableMoneys = $this->objAvailableMoney->all();
+
+        return view('available_money.index', compact('availableMoneys', 'carbon'));
     }
 
     /**
@@ -28,7 +29,9 @@ class AvailableMoneyController extends Controller
      */
     public function create()
     {
-        return view('available_money.create');
+        $date = Carbon::now();
+        
+        return view('available_money.create', compact('date'));
     }
 
     /**
@@ -99,10 +102,14 @@ class AvailableMoneyController extends Controller
 
     public function search(Request $request) 
     {
+        $carbon = new Carbon();
+
         $filters = $request->except('_token');
 
-        $availableMoney = $this->objAvailableMoney->where('name', 'like' , '%' . $request->search .'%')->paginate(5);
+        $availableMoneys = $this->objAvailableMoney->where('name', 'like' , '%' . $request->search .'%')
+                                                   ->orWhere('to_spend', 'like', '%' . $request->search .'%')
+                                                   ->paginate(5);
 
-        return view('available_money.index', compact('availableMoney', 'filters'));
+        return view('available_money.index', compact('availableMoneys', 'filters', 'carbon'));
     }
 }

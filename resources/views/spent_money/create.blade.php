@@ -5,7 +5,6 @@
         $formName = isset($finance) ? 'formEdit' : 'formCad';
         $actionUrl = isset($finance) ? url('despesa/' . $finance->id) : url('despesa');
         $method = isset($finance) ? 'PUT' : 'POST';
-        $date = \Carbon\Carbon::now();
     @endphp
     <section>
         <div class="container">
@@ -20,7 +19,7 @@
                     </h1>
                 </div>
             </div>
-            <form name="{{ $formName }}" id="{{ $formName }}" method="post" action="{{ $actionUrl }}">
+            <form name="!! $formName }}" id="{{ $formName }}" method="post" action="{{ $actionUrl }}">
                 @method($method)
                 @csrf
                 @if ($errors->any())
@@ -40,8 +39,8 @@
                             <option value="{{ $finance->relCategory->id ?? '' }}">
                                 {{ $finance->relCategory->name ?? 'Selecione uma categoria' }}
                             </option>
-                            @foreach ($category as $categories)
-                                <option value="{{ $categories->id }}">{{ $categories->name }}</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -59,19 +58,18 @@
                     </div>
                     <div class="col-lg-4">
                         <p class="margin-show">Saldo disponível</p>
-                        @foreach ($availableMoney as $availableMoneys)
-                            <input name="available_money_id" id="available_money_id" value="{{ $availableMoneys->id }}"
+                        @foreach ($availableMoneys as $availableMoney)
+                            <input name="available_money_id" id="available_money_id" value="{{ $availableMoney->id }}"
                                 hidden>
                             <span class="form-control disabled">R$
-                                {{ number_format($availableMoneys->to_spend, 2) ?? '' }}</span>
+                                {{ number_format($availableMoney->to_spend, 2) ?? '' }}</span>
                         @endforeach
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-lg-12">
                         <p class="margin-show">Descrição</p>
-                        <textarea class="form-control" placeholder="Mensagem..." id="floatingTextarea" name="description" cols="30"
-                            rows="5" required>{{ $finance->description ?? '' }}</textarea>
+                        <textarea class="form-control textarea-height" id="editor" placeholder="Mensagem..." name="description" required>{{ $finance->description ?? '' }}</textarea>
                     </div>
                 </div>
                 <div class="text-center p-3">

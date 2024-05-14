@@ -31,23 +31,25 @@ class FinanceController extends Controller
     {
         $carbon = new Carbon();
 
-        $finance = $this->objSpentMoney->all();
+        $finances = $this->objSpentMoney->all();
         $availableMoney = $this->objAvailableMoney->all();
 
-        $financeValue = $finance->sum('value');
+        $financeValue = $finances->sum('value');
         $moneySpend = $availableMoney->sum('to_spend');
 
         $diff = $moneySpend - $financeValue;
 
-        return view('spent_money.index', compact('finance', 'availableMoney', 'diff', 'carbon'));
+        return view('spent_money.index', compact('finances', 'availableMoney', 'diff', 'carbon'));
     }
 
     public function create()
     {
+        $date = Carbon::now();
+
         $category = $this->objCategory->all();
         $availableMoney = $this->objAvailableMoney->all();
 
-        return view('spent_money.create', compact('category', 'availableMoney'));
+        return view('spent_money.create', compact('category', 'availableMoney', 'date'));
     }
 
     public function store(Request $request)
@@ -84,32 +86,42 @@ class FinanceController extends Controller
     {
         $finance = $this->objSpentMoney->find($id);
 
-        return view('spent_money.show', compact('finance'));
+        $availableMoney = $finance->find($finance->id)->relAvailableMoney;
+        $category =  $finance->find($finance->id)->relCategory;
+
+        $date = Carbon::parse($finance->date)->format('d/m/Y');
+
+        $financeValue = $finance->sum('value');
+        $moneySpend = $availableMoney->sum('to_spend');
+
+        $diff = $moneySpend - $financeValue;
+
+        return view('spent_money.show', compact('finance', 'diff', 'availableMoney', 'category', 'date'));
     }
 
     public function edit($id)
     {
         $finance = $this->objSpentMoney->find($id);
-        $category = $this->objCategory->all();
-        $availableMoney = $this->objAvailableMoney->all();
+        $categories = $this->objCategory->all();
+        $availableMoneys = $this->objAvailableMoney->all();
 
-        return view('spent_money.create', compact('finance', 'category', 'availableMoney'));
+        return view('spent_money.create', compact('finance', 'categories', 'availableMoneys'));
     }
 
     public function update(Request $request, $id)
     {
-        $finance = SpentMoney::findOrFail($id);
+        $finances = SpentMoney::findOrFail($id);
 
         $newValue = str_replace(['R$', ','], '', $request->value);
 
-        $finance->name = $request->name;
-        $finance->description = $request->description;
-        $finance->value = $newValue;
-        $finance->date = $request->date;
-        $finance->categories_id = $request->categories_id;
-        $finance->available_money_id = $request->available_money_id;
+        $finances->name = $request->name;
+        $finances->description = $request->description;
+        $finances->value = $newValue;
+        $finances->date = $request->date;
+        $finances->categories_id = $request->categories_id;
+        $finances->available_money_id = $request->available_money_id;
 
-        $finance->save();
+        $finances->save();
 
         return redirect('despesa');
     }
@@ -125,10 +137,23 @@ class FinanceController extends Controller
 
     public function search(Request $request) 
     {
+        $carbon = new Carbon();
+        $search = $request->input('search');   
         $filters = $request->except('_token');
 
-        $finance = $this->objSpentMoney->where('name', 'like' , '%' . $request->search .'%')->paginate(5);
+        $finances = $this->objSpentMoney->where('name', 'like' , '%' . $search .'%')
+                                        ->orWhereHas('relCategory', function($query) use ($search) {
+                                            $query->where('name', 'like', '%'. $search . '%');
+                                        })->orWhere('value', 'like' , '%' . $search .'%')
+                                        ->paginate(5);
 
-        return view('spent_money.index', compact('finance', 'filters'));
+        $availableMoney = $this->objAvailableMoney->paginate(5);
+
+        $financeValue = $finances->sum('value');
+        $moneySpend = $availableMoney->sum('to_spend');
+
+        $diff = $moneySpend - $financeValue;
+
+        return view('spent_money.index', compact('finances', 'filters', 'carbon', 'diff'));
     }
 }

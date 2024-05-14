@@ -13,11 +13,6 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        @php
-                            $category = $finance->find($finance->id)->relCategory;
-                            $availableMoney = $finance->find($finance->id)->relAvailableMoney;
-                            $date = \Carbon\Carbon::parse($finance->date)->format('d/m/Y');
-                        @endphp
                         <div class="col-lg-6">
                             <p class="margin-show">Nome</p>
                             <input class="form-control" value="{{ $finance->name }}" disabled>
@@ -39,14 +34,13 @@
                         </div>
                         <div class="col-lg-4">
                             <p class="margin-show">Saldo disponível</p>
-                            <input class="form-control"
-                                value="R$ {{ number_format($availableMoney->to_spend, 2, '.', ',') }}" disabled>
+                            <input class="form-control" value="R$ {{ number_format($diff, 2, '.', ',') }}" disabled>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-lg-12">
                             <p class="margin-show">Descrição</p>
-                            <textarea class="form-control textarea-show" disabled>{{ $finance->description }}</textarea>
+                            <div class="form-control textarea-bg">{!! $finance->description !!}</div>
                         </div>
                     </div>
                 </div>

@@ -39,7 +39,7 @@
                         <a class="nav-link" href="{{ url('despesa') }}">Despesas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('entrada') }}">Entradas</a>
+                        <a class="nav-link" href="{{ url('entrada') }}">Receitas</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('categoria') }}">Categorias</a>
@@ -52,7 +52,8 @@
 
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery_mask.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/jquery_mask.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
 </body>
 

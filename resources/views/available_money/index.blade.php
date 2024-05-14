@@ -8,7 +8,7 @@
                     <h1 class="text-center">Receitas</h1>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <form class="ms-3 d-flex align-items-center" action="{{ url('categoria/search') }}" method="post">
+                    <form class="ms-3 d-flex align-items-center" action="{{ url('entrada/search') }}" method="post">
                         @csrf
                         <input class="form-control" type="search" name="search" placeholder="Pesquisar...">
                         <button class="btn-off ms-2" type="submit">
@@ -32,22 +32,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($availableMoney->isEmpty())
+                            @if ($availableMoneys->isEmpty())
                                 <table>
                                     <p class="text-center">Nenhum resultado encontrado!</p>
                                 </table>
                             @else
-                                @foreach ($availableMoney as $availableMoneys)
+                                @foreach ($availableMoneys as $availableMoney)
                                     @php
-                                        $date = $carbon::parse($availableMoneys->date)->format('d/m/Y');
+                                        $date = $carbon::parse($availableMoney->date)->format('d/m/Y');
                                     @endphp
                                     <tr>
                                         <td class="padding-table">
-                                            <p class="mt-3">{{ $availableMoneys->name ?? 'Sem nome' }}</p>
+                                            <p class="mt-3">{{ $availableMoney->name ?? 'Sem nome' }}</p>
                                         </td>
                                         <td class="padding-table">
                                             <p class="mt-3">
-                                                R$ {{ number_format($availableMoneys->to_spend, 2, '.') }}
+                                                R$ {{ number_format($availableMoney->to_spend, 2, '.') }}
                                             </p>
                                         </td>
                                         <td class="padding-table">
@@ -57,14 +57,14 @@
                                         <td class="d-flex justify-content-end padding-table">
                                             <p class="mt-3">
                                                 <a class="text-decoration-none"
-                                                    href="{{ url('entrada/' . $availableMoneys->id) . '/edit' }}">
+                                                    href="{{ url('entrada/' . $availableMoney->id) . '/edit' }}">
                                                     <button class="btn btn-primary btn-view">
                                                         <i class="fi fi-rr-file-edit btn-icon"></i>
                                                     </button>
                                                 </a>
                                             </p>
                                             <form class="mt-3" id="deleteForm" method="POST"
-                                                action="{{ url('entrada/' . $availableMoneys->id) }}">
+                                                action="{{ url('entrada/' . $availableMoney->id) }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class=" ms-2 btn btn-danger btn-view" type="submit">
