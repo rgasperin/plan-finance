@@ -54,8 +54,10 @@
     </nav>
     @yield('content')
 
-    <script src="{{ asset('assets/js/jquery.js') }}"></script>
+
+    @yield('javascript')
     <script src="{{ asset('assets/dist/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery_mask.js') }}"></script>
     <script src="{{ asset('assets/dist/js/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>

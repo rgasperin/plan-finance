@@ -79,14 +79,10 @@
                                                             <i class="fi fi-rr-file-edit btn-icon"></i>
                                                         </button>
                                                     </a>
-                                                    <form id="deleteForm" method="POST"
-                                                        action="{{ url('despesa/' . $finance->id) }}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="ms-2 btn btn-danger btn-view" type="submit">
-                                                            <i class="fi fi-rr-trash btn-icon"></i>
-                                                        </button>
-                                                    </form>
+                                                    <button class="ms-2 btn btn-danger btn-view" type="button"
+                                                        data-toggle="modal" data-target="#confirmDeleteModal">
+                                                        <i class="fi fi-rr-trash btn-icon"></i>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -99,4 +95,29 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmação de exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja deletar este item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" method="POST" action="{{ url('despesa/' . $finance->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="ms-2 btn btn-danger btn-view" type="submit">
+                            Confirmar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
