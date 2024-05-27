@@ -7,7 +7,6 @@ use App\Models\AvailableMoney;
 use App\Models\SpentMoney;
 use App\Models\Category;
 use Carbon\Carbon;
-use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class FinanceController extends Controller
 {
@@ -23,46 +22,23 @@ class FinanceController extends Controller
 
     public function index()
     {   
-        $finance = $this->objSpentMoney->all();
+        $carbon = new Carbon();
+        $currentMonth = $carbon->month;
+        $currentYear = $carbon->year;
+    
+        $finances = $this->objSpentMoney
+                         ->whereMonth('date', $currentMonth)
+                         ->whereYear('date', $currentYear)
+                         ->paginate(4);
 
-        $item = $this->objSpentMoney->pluck('name')->toArray();
-
-        $data = [
-            ['date' => '2024-05-01', 'value' => 100],
-            ['date' => '2024-05-02', 'value' => 150],
-            ['date' => '2024-05-03', 'value' => 200],
-        ];
-        
-        $formatted_data = [];
-        foreach ($data as $item) {
-            $formatted_data[$item['date']] = $item['value'];
-        }
-
-        $chart_options = [
-            'chart_title' => 'Users by months',
-            'report_type' => 'group_by_date',
-            'model' => 'App\Models\SpentMoney',
-            'group_by_field' => 'name',
-            'group_by_period' => 'day',
-            'chart_type' => 'bar',
-            'data' => $formatted_data,
-            'fields' => [
-                'date' => 'Date', // Nome do campo da data em seu modelo
-                'value' => 'Value', // Nome do campo do valor em seu modelo
-            ],
-        ];
-
-        
-        $chart = new LaravelChart($chart_options);
-
-        return view('index', compact('finance', 'chart'));
+        return view('index', compact('finances', 'carbon'));
     }
 
     public function spentMoney()
     {
         $carbon = new Carbon();
 
-        $finances = $this->objSpentMoney->all();
+        $finances = $this->objSpentMoney->paginate(8);
         $availableMoney = $this->objAvailableMoney->all();
 
         $financeValue = $finances->sum('value');

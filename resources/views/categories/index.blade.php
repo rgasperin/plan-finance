@@ -66,6 +66,9 @@
                                 @endif
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-center">
+                            {{ $categories->links('pagination::bootstrap-4') }}
+                        </div>
                     </div>
                 </div>
             </div>

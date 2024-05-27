@@ -19,7 +19,7 @@ class AvailableMoneyController extends Controller
     {
         $carbon = new Carbon();
 
-        $availableMoneys = $this->objAvailableMoney->all();
+        $availableMoneys = $this->objAvailableMoney->paginate(5);
 
         return view('available_money.index', compact('availableMoneys', 'carbon'));
     }
