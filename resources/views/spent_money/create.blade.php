@@ -34,7 +34,7 @@
                             <input class="form-control form-control-bg" type="text" name="name" id="name"
                                 value="{{ $finance->name ?? '' }}" placeholder="Nome da categoria" required>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-5">
                             <p class="margin-show">Categoria</p>
                             <select class="form-select form-control-bg" name="categories_id" id="categories_id" required>
                                 <option value="{{ $finance->relCategory->id ?? '' }}">
@@ -44,6 +44,12 @@
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <p class="margin-show">A pagar</p>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -70,7 +76,7 @@
                         <div class="col-lg-12">
                             <p class="margin-show">Descrição</p>
                             <textarea class="form-control textarea-height" id="editor" placeholder="Mensagem..." name="description" required>
-                                    {{ $finance->description ?? '' }}
+                                    {!! $finance->description ?? '' !!}
                                 </textarea>
                         </div>
                     </div>

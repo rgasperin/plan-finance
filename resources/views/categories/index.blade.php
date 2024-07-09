@@ -66,9 +66,11 @@
                                 @endif
                             </tbody>
                         </table>
-                        <div class="d-flex justify-content-center">
-                            {{ $categories->links('pagination::bootstrap-4') }}
-                        </div>
+                        @if ($categories->hasPages())
+                            <div class="d-flex justify-content-center">
+                                {{ $categories->links('pagination::bootstrap-4') }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -88,13 +90,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form id="deleteForm" method="POST" action="{{ url('categoria/' . $category->id) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button class="ms-2 btn btn-danger btn-view" type="submit">
-                            Confirmar
-                        </button>
-                    </form>
+                    @foreach ($categories as $category)
+                        <form id="deleteForm" method="POST" action="{{ url('categoria/' . $category->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="ms-2 btn btn-danger btn-view" type="submit">
+                                Confirmar
+                            </button>
+                        </form>
+                    @endforeach
                 </div>
             </div>
         </div>

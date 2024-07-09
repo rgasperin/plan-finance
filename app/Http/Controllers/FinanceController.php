@@ -73,11 +73,13 @@ class FinanceController extends Controller
             'description' => 'required',
             'value' => 'required',
             'date' => 'required',
+            'available_money_id' => 'required',
         ], [
             'name.required' => 'O campo NOME é obrigatório!',
             'description.required' => 'O campo DESCRIÇÃO é obrigatório!',
             'value.required' => 'O campo VALOR é obrigatório!',
             'date.required' => 'O campo DATA é obrigatório!',
+            'available_money_id' => 'O SALDO não ser R$ 0,00'
         ]);
 
         $newValue = str_replace(['R$', ','], '', $request->value);

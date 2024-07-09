@@ -33,13 +33,15 @@
                                     <th class="padding-card">Categoria</th>
                                     <th class="padding-card">Valor</th>
                                     <th class="padding-card">Data</th>
+                                    <th class="padding-card">Forma de pagamento</th>
+                                    <th class="padding-card"></th>
                                     <th class="padding-card text-end">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if ($finances->isEmpty())
                                     <table>
-                                        <p class="text-center">Nenhum resultaho encontrado!</p>
+                                        <p class="text-center">Nenhum resultado encontrado!</p>
                                     </table>
                                 @else
                                     @foreach ($finances as $finance)
@@ -63,6 +65,12 @@
                                             </td>
                                             <td class="padding-table">
                                                 <p class="mt-3"> {{ $date }} </p>
+                                            </td>
+                                            <td class="padding-table">
+                                                <p class="mt-3"> Credito/Debito </p>
+                                            </td>
+                                            <td class="padding-table">
+                                                <p class="mt-3"> Pago/A pagar </p>
                                             </td>
                                             <td class="padding-table">
                                                 <div class="mt-3 d-flex justify-content-end">
@@ -90,9 +98,11 @@
                                 @endif
                             </tbody>
                         </table>
-                        <div class="d-flex justify-content-center">
-                            {{ $finances->links('pagination::bootstrap-4') }}
-                        </div>
+                        @if ($finances->hasPages())
+                            <div class="d-flex justify-content-center">
+                                {{ $finances->links('pagination::bootstrap-4') }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -112,13 +122,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form id="deleteForm" method="POST" action="{{ url('despesa/' . $finance->id) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button class="ms-2 btn btn-danger btn-view" type="submit">
-                            Confirmar
-                        </button>
-                    </form>
+                    @foreach ($finances as $finance)
+                        <form id="deleteForm" method="POST" action="{{ url('despesa/' . $finance->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="ms-2 btn btn-danger btn-view" type="submit">
+                                Confirmar
+                            </button>
+                        </form>
+                    @endforeach
                 </div>
             </div>
         </div>

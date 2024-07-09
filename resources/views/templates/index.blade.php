@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="{{ url('assets/dist/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('assets/dist/uicons/css/uicons-regular-rounded.css') }}">
     <link rel="stylesheet" href="{{ url('assets/dist/uicons-solid/css/uicons-solid-straight.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
+
     <link rel="stylesheet" href="{{ url('assets/css/styles.css') }}">
 
 </head>
@@ -55,12 +58,15 @@
     @yield('content')
 
 
-    @yield('javascript')
+
+
     <script src="{{ asset('assets/dist/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery_mask.js') }}"></script>
     <script src="{{ asset('assets/dist/js/ckeditor.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    @yield('javascript')
 </body>
 
 </html>
