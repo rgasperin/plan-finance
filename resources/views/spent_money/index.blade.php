@@ -7,26 +7,30 @@
                 <div class="col-lg-12">
                     <h1 class="text-center">Despesas</h1>
                 </div>
-                <div class="col-lg-12 d-flex justify-content-center mt-3">
+            </div>
+            <div class="row">
+                <div class="col-lg-6 d-flex justify-content-center mt-3">
                     <p class="text-center">Orçamento mensal: R$ {{ number_format($diff, 2, '.', ',') }}</p>
                 </div>
-                <div class="d-flex justify-content-end">
-                    <form class="ms-3 d-flex align-items-center" action="{{ url('despesa/search') }}" method="post">
-                        @csrf
-                        <input class="form-control" type="search" name="search" placeholder="Pesquisar...">
-                        <button class="btn-off ms-2" type="submit">
-                            <i class="fi fi-rr-search icon-style-search btn-icon-bg"></i>
-                        </button>
-                    </form>
-                    <a class="ms-2 text-decoration-none" href="{{ url('despesa/create') }}">
-                        <i class="fi fi-rr-plus-small icon-style btn-icon-bg"></i>
-                    </a>
+                <div class="col-lg-6">
+                    <div class="d-flex justify-content-end">
+                        <form class="ms-3 d-flex align-items-center" action="{{ url('despesa/search') }}" method="post">
+                            @csrf
+                            <input class="form-control" type="search" name="search" placeholder="Pesquisar...">
+                            <button class="btn-off ms-2" type="submit">
+                                <i class="fi fi-rr-search icon-style-search btn-icon-bg"></i>
+                            </button>
+                        </form>
+                        <a class="ms-2 text-decoration-none" href="{{ url('despesa/create') }}">
+                            <i class="fi fi-rr-plus-small icon-style btn-icon-bg"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12 mt-3">
                     <div class="card p-0">
-                        <table class="table table-bg table-hover">
+                        <table class="table table-bg">
                             <thead class="table-dark-bg">
                                 <tr>
                                     <th class="padding-card">Nome</th>
@@ -47,7 +51,7 @@
                                     @foreach ($finances as $finance)
                                         @php
                                             $category = $finance->find($finance->id)->relCategory;
-                                            $availableMoney = $finance->find($finance->id)->relAvailableMoney;
+                                            $payment = $finance->find($finance->id)->relPayment;
                                             $date = $carbon::parse($finance->date)->format('d/m/Y');
                                         @endphp
                                         <tr>
@@ -67,10 +71,12 @@
                                                 <p class="mt-3"> {{ $date }} </p>
                                             </td>
                                             <td class="padding-table">
-                                                <p class="mt-3"> Credito/Debito </p>
+                                                <div class="d-flex justify-content-center">
+                                                    <p class="mt-3"> {{ $payment->name ?? 'Pagamento Pendente' }} </p>
+                                                </div>
                                             </td>
                                             <td class="padding-table">
-                                                <p class="mt-3"> Pago/A pagar </p>
+                                                <p class="mt-3">{{ $finance->payable ? 'A pagar' : 'Pago' }}</p>
                                             </td>
                                             <td class="padding-table">
                                                 <div class="mt-3 d-flex justify-content-end">
@@ -83,12 +89,13 @@
 
                                                     <a class="ms-2 text-decoration-none"
                                                         href="{{ url('despesa/' . $finance->id) . '/edit' }}">
-                                                        <button class="btn btn-primary btn-view">
+                                                        <button class="btn btn-secondary btn-view">
                                                             <i class="fi fi-rr-file-edit btn-icon"></i>
                                                         </button>
                                                     </a>
                                                     <button class="ms-2 btn btn-danger btn-view" type="button"
-                                                        data-toggle="modal" data-target="#confirmDeleteModal">
+                                                        data-toggle="modal" data-target="#confirmDeleteModal"
+                                                        id="delete-button-{{ $finance->id }}">
                                                         <i class="fi fi-rr-trash btn-icon"></i>
                                                     </button>
                                                 </div>
@@ -122,17 +129,31 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    @foreach ($finances as $finance)
-                        <form id="deleteForm" method="POST" action="{{ url('despesa/' . $finance->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button class="ms-2 btn btn-danger btn-view" type="submit">
-                                Confirmar
-                            </button>
-                        </form>
-                    @endforeach
+                    <form id="deleteForm" method="POST" action="">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Confirmar</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $(".btn-danger").click(function() {
+                var buttonId = $(this).attr('id');
+                var itemId = buttonId.split('-').pop();
+
+                if (itemId) {
+                    $("#deleteForm").attr('action', '/despesa/' + itemId);
+                    $("#confirmDeleteModal").modal('show');
+                } else {
+                    console.error('ID do item não encontrado.');
+                }
+            });
+        });
+    </script>
 @endsection

@@ -4,26 +4,30 @@
     <section>
         <div class="container">
             <div class="row mt-5">
-                <div class="col-lg-12">
-                    <h1 class="text-center">Receitas</h1>
+                <div class="col-lg-6">
+                    <div class="d-flex justify-content-center">
+                        <h1 class="text-center">Receitas</h1>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-end">
-                    <form class="ms-3 d-flex align-items-center" action="{{ url('entrada/search') }}" method="post">
-                        @csrf
-                        <input class="form-control" type="search" name="search" placeholder="Pesquisar...">
-                        <button class="btn-off ms-2" type="submit">
-                            <i class="fi fi-rr-search icon-style-search btn-icon-bg"></i>
-                        </button>
-                    </form>
-                    <a class="ms-2 text-decoration-none" href="{{ url('entrada/create') }}">
-                        <i class="fi fi-rr-plus-small icon-style btn-icon-bg"></i>
-                    </a>
+                <div class="col-lg-6">
+                    <div class="d-flex justify-content-end">
+                        <form class="ms-3 d-flex align-items-center" action="{{ url('entrada/search') }}" method="post">
+                            @csrf
+                            <input class="form-control" type="search" name="search" placeholder="Pesquisar...">
+                            <button class="btn-off ms-2" type="submit">
+                                <i class="fi fi-rr-search icon-style-search btn-icon-bg"></i>
+                            </button>
+                        </form>
+                        <a class="ms-2 text-decoration-none" href="{{ url('entrada/create') }}">
+                            <i class="fi fi-rr-plus-small icon-style btn-icon-bg"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12 mt-3">
                     <div class="card p-0">
-                        <table class="table table-bg table-hover">
+                        <table class="table table-bg">
                             <thead class="table-dark-bg">
                                 <tr>
                                     <th class="padding-card">Nome</th>
@@ -59,7 +63,7 @@
                                                 <div class="mt-3 d-flex justify-content-end ">
                                                     <a class="text-decoration-none"
                                                         href="{{ url('entrada/' . $availableMoney->id) . '/edit' }}">
-                                                        <button class="btn btn-primary btn-view">
+                                                        <button class="btn btn-secondary btn-view">
                                                             <i class="fi fi-rr-file-edit btn-icon"></i>
                                                         </button>
                                                     </a>

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AvailableMoney;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AvailableMoneyController extends Controller
 {
@@ -31,7 +31,7 @@ class AvailableMoneyController extends Controller
     public function create()
     {
         $date = Carbon::now();
-        
+
         return view('available_money.create', compact('date'));
     }
 
@@ -47,7 +47,7 @@ class AvailableMoneyController extends Controller
         ], [
             'name.required' => 'O campo NOME é obrigatorio!',
             'to_spend.required' => 'O campo VALOR é obrigatorio!',
-            'date.required' => 'O campo DATA é obrigatorio!'
+            'date.required' => 'O campo DATA é obrigatorio!',
         ]);
 
         $availableMoney = $this->objAvailableMoney->create([
@@ -56,9 +56,7 @@ class AvailableMoneyController extends Controller
             'date' => $request->date,
         ]);
 
-        $availableMoney->save();
-
-        return redirect('entrada');
+        return redirect('entrada')->with('success', "Entrada adicionada!");
     }
 
     /**
@@ -84,7 +82,7 @@ class AvailableMoneyController extends Controller
 
         $availableMoney->save();
 
-        return redirect('entrada');
+        return redirect('entrada')->with('success', "Entrada atualizada!");
     }
 
     /**
@@ -95,19 +93,19 @@ class AvailableMoneyController extends Controller
         $availableMoney = AvailableMoney::findOrFail($id);
 
         $availableMoney->delete();
-        
-        return redirect('entrada');
+
+        return redirect('entrada')->with('success', "Entrada deletada!");
     }
 
-    public function search(Request $request) 
+    public function search(Request $request)
     {
         $carbon = new Carbon();
 
         $filters = $request->except('_token');
 
-        $availableMoneys = $this->objAvailableMoney->where('name', 'like' , '%' . $request->search .'%')
-                                                   ->orWhere('to_spend', 'like', '%' . $request->search .'%')
-                                                   ->paginate(5);
+        $availableMoneys = $this->objAvailableMoney->where('name', 'like', '%' . $request->search . '%')
+            ->orWhere('to_spend', 'like', '%' . $request->search . '%')
+            ->paginate(5);
 
         return view('available_money.index', compact('availableMoneys', 'filters', 'carbon'));
     }
