@@ -1,11 +1,6 @@
 @extends('templates.index')
 
 @section('content')
-    @php
-        $formName = isset($availableMoney) ? 'formEdit' : 'formCad';
-        $actionUrl = isset($availableMoney) ? url('entrada/' . $availableMoney->id) : url('entrada');
-        $method = isset($availableMoney) ? 'PUT' : 'POST';
-    @endphp
     <section class="p-5">
         <div class="container">
             <div class="card p-4">

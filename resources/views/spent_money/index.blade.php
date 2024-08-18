@@ -49,30 +49,28 @@
                                     </table>
                                 @else
                                     @foreach ($finances as $finance)
-                                        @php
-                                            $category = $finance->find($finance->id)->relCategory;
-                                            $payment = $finance->find($finance->id)->relPayment;
-                                            $date = $carbon::parse($finance->date)->format('d/m/Y');
-                                        @endphp
                                         <tr>
                                             <td class="padding-table">
                                                 <p class="mt-3"> {{ $finance->name }}</p>
                                             </td>
                                             <td class="padding-table">
                                                 <div class="d-flex align-items-center">
-                                                    <i class="fi fi-ss-circle" style="color:{{ $category->color }}"></i>
-                                                    <p class="ms-2 mt-3"> {{ $category->name ?? 'Sem Categoria' }} </p>
+                                                    <i class="fi fi-ss-circle"
+                                                        style="color:{{ $finance->category->color }}"></i>
+                                                    <p class="ms-2 mt-3"> {{ $finance->category->name ?? 'Sem Categoria' }}
+                                                    </p>
                                                 </div>
                                             </td>
                                             <td class="padding-table">
                                                 <p class="mt-3"> R$ {{ number_format($finance->value, 2, '.', ',') }} </p>
                                             </td>
                                             <td class="padding-table">
-                                                <p class="mt-3"> {{ $date }} </p>
+                                                <p class="mt-3"> {{ $finance->formatted_date }} </p>
                                             </td>
                                             <td class="padding-table">
                                                 <div class="d-flex justify-content-center">
-                                                    <p class="mt-3"> {{ $payment->name ?? 'Pagamento Pendente' }} </p>
+                                                    <p class="mt-3"> {{ $finance->payment->name ?? 'Pagamento Pendente' }}
+                                                    </p>
                                                 </div>
                                             </td>
                                             <td class="padding-table">
@@ -80,8 +78,8 @@
                                             </td>
                                             <td class="padding-table">
                                                 <div class="mt-3 d-flex justify-content-end">
-                                                    <a class="text-decoration-none"
-                                                        href="{{ url('despesa/' . $finance->id) }}">
+                                                    <a class="text-decoration-none open-modal"
+                                                        href="{{ url('despesa/' . $finance->id) . '/modal' }}">
                                                         <button class="btn btn-dark btn-view">
                                                             <i class="fi fi-rr-eye btn-icon"></i>
                                                         </button>
@@ -138,6 +136,18 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showModalLabel">Detalhes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('javascript')
@@ -154,6 +164,20 @@
                     console.error('ID do item não encontrado.');
                 }
             });
+        });
+    </script>
+
+    <script>
+        $(document).on('click', '.open-modal', function(e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+
+            $.get(url, function(data) {
+                $('#showModal .modal-body').html(data);
+                $('#showModal').modal('show');
+            }).fail(function(xhr, status, error) {
+                console.error('Erro ao carregar o modal:', status, error);
+            });;
         });
     </script>
 @endsection

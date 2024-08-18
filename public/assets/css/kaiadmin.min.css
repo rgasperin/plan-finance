@@ -4971,10 +4971,7 @@ label.error {
 .table > thead > tr > th {
     vertical-align: middle;
 }
-.table > tbody > tr > td,
-.table > tbody > tr > th {
-    padding: 16px 24px !important;
-}
+
 .table > tfoot > tr > td,
 .table > tfoot > tr > th {
     padding: 12px 24px !important;

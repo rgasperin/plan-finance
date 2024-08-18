@@ -120,10 +120,6 @@ body {
     color: #7e7e7e;
 }
 
-.form-control:disabled {
-    background-color: #f8f8f8;
-}
-
 .form-control {
     border: 1px solid #f1f1f1 !important;
 }
@@ -141,7 +137,7 @@ body {
 }
 
 .textarea-bg {
-    background-color: #f8f8f8;
+    background-color: #e8e8e8 !important;
 }
 
 tbody,
@@ -151,4 +147,25 @@ th,
 thead,
 tr {
     border-style: none;
+}
+
+.main-container {
+    width: 795px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.disable {
+    opacity: 0.6 !important;
+}
+
+.btn-none {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    margin-bottom: 0;
+    margin-right: 5px;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #0f0f0f !important;
 }

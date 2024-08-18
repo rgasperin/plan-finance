@@ -1,11 +1,6 @@
 @extends('templates.index')
 
 @section('content')
-    @php
-        $formName = isset($finance) ? 'formEdit' : 'formCad';
-        $actionUrl = isset($finance) ? url('despesa/' . $finance->id) : url('despesa');
-        $method = isset($finance) ? 'PUT' : 'POST';
-    @endphp
     <section class="p-5">
         <div class="container">
             <div class="card p-4">
@@ -103,11 +98,37 @@
 @endsection
 
 @section('javascript')
-    <script>
-        $(document).ready(function() {
-            ClassicEditor.create(document.querySelector("#editor")).catch((error) => {
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "../../assets/vendor/ckeditor5.js",
+                "ckeditor5/": "../../assets/vendor/"
+            }
+        }
+    </script>
+    <script type="module">
+        import {
+            ClassicEditor,
+            Essentials,
+            Paragraph,
+            Bold,
+            Italic,
+            Font
+        } from 'ckeditor5';
+
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                plugins: [Essentials, Paragraph, Bold, Italic, Font],
+                toolbar: [
+                    'undo', 'redo', '|', 'bold', 'italic', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                ]
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(error => {
                 console.error(error);
             });
-        });
     </script>
 @endsection

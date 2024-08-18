@@ -24,9 +24,6 @@
                                     </table>
                                 @else
                                     @foreach ($finances as $finance)
-                                        @php
-                                            $date = $carbon::parse($finance->date);
-                                        @endphp
                                         <tr>
                                             <td class="padding-table">
                                                 <p class="mt-3"> {{ $finance->name }}</p>
@@ -35,7 +32,7 @@
                                                 <p class="mt-3"> R$ {{ number_format($finance->value, 2, '.', ',') }} </p>
                                             </td>
                                             <td class="padding-table">
-                                                <p class="mt-3"> {{ $date->format('d/m/Y') }} </p>
+                                                <p class="mt-3"> {{ $finance->formatted_date }} </p>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -80,7 +77,7 @@
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-center">
-                            {{ $finances->links('pagination::bootstrap-4') }}
+                            {{ $available_moneys->links('pagination::bootstrap-4') }}
                         </div>
                     </div>
                 </div>

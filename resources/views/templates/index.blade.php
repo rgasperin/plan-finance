@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+    <link rel="stylesheet" href="{{ url('assets/vendor/ckeditor5.css') }}">
+
     <link rel="stylesheet" href="{{ url('assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ url('assets/css/kaiadmin.min.css') }}" />
     <link rel="stylesheet" href="{{ url('assets/css/styles.css') }}">
@@ -29,6 +31,7 @@
 </head>
 
 <body>
+
     <div class="sidebar" data-background-color="dark">
         <div class="sidebar-logo">
             <div class="logo-header" data-background-color="dark">
@@ -48,9 +51,6 @@
                         </a>
                     </li>
                     <li class="nav-section">
-                        <span class="sidebar-mini-icon">
-                            <i class="fa fa-ellipsis-h"></i>
-                        </span>
                         <h4 class="text-section">Páginas</h4>
                     </li>
                     <li class="nav-item">
@@ -75,7 +75,55 @@
             </div>
         </div>
     </div>
+
     <div class="main-panel">
+
+        <div class="main-header">
+            <!-- Navbar Header -->
+            <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                @if (auth()->check())
+                    <div class="container-fluid">
+                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                            <li class="nav-item topbar-user dropdown hidden-caret">
+                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                                    aria-expanded="false">
+                                    <span class="profile-username">
+                                        <span class="op-7">Meu</span>
+                                        <span class="fw-bold">Perfil</span>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                    <div class="dropdown-user-scroll scrollbar-outer">
+                                        <li>
+                                            <div class="user-box">
+                                                <div class="u-text">
+                                                    <h4>{{ auth()->user()->name }}</h4>
+                                                    <p class="text-muted">{{ auth()->user()->email }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item">
+                                                <form action="{{ url('logout/' . auth()->user()->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn-none" type="submit">
+                                                        Logout
+                                                    </button>
+                                                </form>
+                                            </a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
+            </nav>
+            <!-- End Navbar -->
+        </div>
 
         <div class="container">
             @yield('content')
@@ -92,12 +140,15 @@
         </footer>
     </div>
 
-    <script src="{{ asset('assets/dist/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery_mask.js') }}"></script>
-    <script src="{{ asset('assets/dist/js/ckeditor.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
+
+    <script src="{{ asset('assets/dist/bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
     <script src="{{ asset('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugin/chart.js/chart.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
@@ -107,9 +158,11 @@
     <script src="{{ asset('assets/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugin/jsvectormap/world.js') }}"></script>
     <script src="{{ asset('assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+
     <script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
+
     <script>
         @if (Session::has('success'))
             Swal.fire({

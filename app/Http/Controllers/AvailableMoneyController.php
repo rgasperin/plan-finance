@@ -20,7 +20,10 @@ class AvailableMoneyController extends Controller
         $carbon = new Carbon();
 
         $availableMoneys = $this->objAvailableMoney->paginate(5);
-        // dd($availableMoney);
+
+        $availableMoneys->each(function ($availableMoney) {
+            $availableMoney->formatted_date = Carbon::parse($availableMoney->date)->format('d/m/Y');
+        });
 
         return view('available_money.index', compact('availableMoneys', 'carbon'));
     }
@@ -32,7 +35,11 @@ class AvailableMoneyController extends Controller
     {
         $date = Carbon::now();
 
-        return view('available_money.create', compact('date'));
+        $formName = 'formCad';
+        $actionUrl = url('entrada');
+        $method = 'POST';
+
+        return view('available_money.create', compact('date', 'formName', 'actionUrl', 'method'));
     }
 
     /**
@@ -50,7 +57,7 @@ class AvailableMoneyController extends Controller
             'date.required' => 'O campo DATA é obrigatorio!',
         ]);
 
-        $availableMoney = $this->objAvailableMoney->create([
+        $this->objAvailableMoney->create([
             'name' => $request->name,
             'to_spend' => $request->to_spend,
             'date' => $request->date,
@@ -65,8 +72,11 @@ class AvailableMoneyController extends Controller
     public function edit(string $id)
     {
         $availableMoney = $this->objAvailableMoney->find($id);
+        $formName = 'formEdit';
+        $actionUrl = url('entrada/' . $availableMoney->id);
+        $method = 'PUT';
 
-        return view('available_money.create', compact('availableMoney'));
+        return view('available_money.create', compact('availableMoney', 'formName', 'actionUrl', 'method'));
     }
 
     /**

@@ -43,9 +43,6 @@
                                     </table>
                                 @else
                                     @foreach ($availableMoneys as $availableMoney)
-                                        @php
-                                            $date = $carbon::parse($availableMoney->date)->format('d/m/Y');
-                                        @endphp
                                         <tr>
                                             <td class="padding-table">
                                                 <p class="mt-3">{{ $availableMoney->name ?? 'Sem nome' }}</p>
@@ -56,7 +53,7 @@
                                                 </p>
                                             </td>
                                             <td class="padding-table">
-                                                <p class="mt-3">{{ $date }}</p>
+                                                <p class="mt-3">{{ $availableMoney->formatted_date }}</p>
                                             </td>
 
                                             <td class="padding-table">
@@ -68,7 +65,8 @@
                                                         </button>
                                                     </a>
                                                     <button class="ms-2 btn btn-danger btn-view" type="button"
-                                                        data-toggle="modal" data-target="#confirmDeleteModal">
+                                                        data-toggle="modal" data-target="#confirmDeleteModal"
+                                                        id="delete-button-{{ $availableMoney->id }}">
                                                         <i class="fi fi-rr-trash btn-icon"></i>
                                                     </button>
                                                 </div>
@@ -102,17 +100,31 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    @foreach ($availableMoneys as $availableMoney)
-                        <form id="deleteForm" method="POST" action="{{ url('entrada/' . $availableMoney->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button class="ms-2 btn btn-danger btn-view" type="submit">
-                                Confirmar
-                            </button>
-                        </form>
-                    @endforeach
+                    <form id="deleteForm" method="POST" action="">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Confirmar</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $(".btn-danger").click(function() {
+                var buttonId = $(this).attr('id');
+                var itemId = buttonId.split('-').pop();
+
+                if (itemId) {
+                    $("#deleteForm").attr('action', '/entrada/' + itemId);
+                    $("#confirmDeleteModal").modal('show');
+                } else {
+                    console.error('ID do item não encontrado.');
+                }
+            });
+        });
+    </script>
 @endsection

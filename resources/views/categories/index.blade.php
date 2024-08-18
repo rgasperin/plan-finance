@@ -58,7 +58,8 @@
                                                         </button>
                                                     </a>
                                                     <button class="ms-2 btn btn-danger btn-view" type="button"
-                                                        data-toggle="modal" data-target="#confirmDeleteModal">
+                                                        data-toggle="modal" data-target="#confirmDeleteModal"
+                                                        id="delete-button-{{ $category->id }}">
                                                         <i class="fi fi-rr-trash btn-icon"></i>
                                                     </button>
                                                 </div>
@@ -92,17 +93,31 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    @foreach ($categories as $category)
-                        <form id="deleteForm" method="POST" action="{{ url('categoria/' . $category->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button class="ms-2 btn btn-danger btn-view" type="submit">
-                                Confirmar
-                            </button>
-                        </form>
-                    @endforeach
+                    <form id="deleteForm" method="POST" action="">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Confirmar</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $(".btn-danger").click(function() {
+                var buttonId = $(this).attr('id');
+                var itemId = buttonId.split('-').pop();
+
+                if (itemId) {
+                    $("#deleteForm").attr('action', '/categoria/' + itemId);
+                    $("#confirmDeleteModal").modal('show');
+                } else {
+                    console.error('ID do item não encontrado.');
+                }
+            });
+        });
+    </script>
 @endsection

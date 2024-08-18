@@ -15,6 +15,7 @@ class FinanceController extends Controller
     private $objAvailableMoney;
     private $objCategory;
     private $objPayment;
+    private $carbon;
 
     public function __construct()
     {
@@ -22,29 +23,44 @@ class FinanceController extends Controller
         $this->objAvailableMoney = new AvailableMoney();
         $this->objCategory = new Category();
         $this->objPayment = new Payment();
+        $this->carbon = new Carbon();
     }
 
     public function index()
     {
-        $carbon = new Carbon();
-        $currentMonth = $carbon->month;
-        $currentYear = $carbon->year;
+        $currentMonth = $this->carbon->month;
+        $currentYear = $this->carbon->year;
 
         $finances = $this->objSpentMoney
             ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
             ->paginate(4);
 
+        $finances->each(function ($finance) {
+            $finance->formatted_date = Carbon::parse($finance->date)->format('d/m/Y');
+        });
+
         $available_moneys = $this->objAvailableMoney->paginate(4);
 
-        return view('index', compact('finances', 'carbon', 'available_moneys'));
+        return view('index', compact('finances', 'available_moneys'));
     }
 
     public function spentMoney()
     {
-        $carbon = new Carbon();
+        $currentMonth = $this->carbon->month;
+        $currentYear = $this->carbon->year;
 
-        $finances = $this->objSpentMoney->paginate(8);
+        $finances = $this->objSpentMoney
+            ->whereMonth('date', $currentMonth)
+            ->whereYear('date', $currentYear)
+            ->paginate(6);
+
+        $finances->each(function ($finance) {
+            $finance->category = $finance->relCategory;
+            $finance->payment = $finance->relPayment;
+            $finance->formatted_date = Carbon::parse($finance->date)->format('d/m/Y');
+        });
+
         $availableMoney = $this->objAvailableMoney->all();
 
         $financeValue = $finances->sum('value');
@@ -52,11 +68,15 @@ class FinanceController extends Controller
 
         $diff = $moneySpend - $financeValue;
 
-        return view('spent_money.index', compact('finances', 'availableMoney', 'diff', 'carbon'));
+        return view('spent_money.index', compact('finances', 'availableMoney', 'diff'));
     }
 
     public function create()
     {
+        $formName = 'formCad';
+        $actionUrl = url('despesa');
+        $method = 'POST';
+
         $date = Carbon::now();
 
         $finances = $this->objSpentMoney->all();
@@ -70,7 +90,7 @@ class FinanceController extends Controller
 
         $diff = $moneySpend - $financeValue;
 
-        return view('spent_money.create', compact('categories', 'availableMoneys', 'date', 'diff', 'payments'));
+        return view('spent_money.create', compact('categories', 'availableMoneys', 'date', 'diff', 'payments', 'formName', 'actionUrl', 'method'));
     }
 
     public function store(Request $request)
@@ -91,7 +111,7 @@ class FinanceController extends Controller
 
         $payable = $request->has('payable') ? 1 : 0;
 
-        $finance = $this->objSpentMoney->create([
+        $this->objSpentMoney->create([
             'available_money_id' => $request->available_money_id,
             'categories_id' => $request->categories_id,
             'payments_id' => $request->payments_id ?? null,
@@ -105,35 +125,40 @@ class FinanceController extends Controller
         return redirect('despesa')->with('success', "Despesa adicionada!");
     }
 
-    public function show($id)
+    public function showModal($id)
     {
-        $finance = $this->objSpentMoney->find($id);
+        $finance = $this->objSpentMoney->findOrFail($id);
 
-        $availableMoney = $finance->find($finance->id)->relAvailableMoney;
-        $category = $finance->find($finance->id)->relCategory;
+        $availableMoney = $finance->relAvailableMoney;
+        $category = $finance->relCategory;
 
         $date = Carbon::parse($finance->date)->format('d/m/Y');
 
-        $financeValue = $finance->sum('value');
+        $financeValue = $finance->value;
         $moneySpend = $availableMoney->sum('to_spend');
 
         $diff = $moneySpend - $financeValue;
 
-        return view('spent_money.show', compact('finance', 'diff', 'availableMoney', 'category', 'date'));
+        return view('templates.modal_details', compact('finance', 'diff', 'availableMoney', 'category', 'date'));
     }
 
     public function edit($id)
     {
         $finance = $this->objSpentMoney->find($id);
+        $formName = 'formEdit';
+        $actionUrl = url('despesa/' . $finance->id);
+        $method = 'PUT';
+
         $categories = $this->objCategory->all();
         $availableMoneys = $this->objAvailableMoney->all();
+        $payments = $this->objPayment->all();
 
         $financeValue = $finance->sum('value');
         $moneySpend = $availableMoneys->sum('to_spend');
 
         $diff = $moneySpend - $financeValue;
 
-        return view('spent_money.create', compact('finance', 'categories', 'availableMoneys', 'diff'));
+        return view('spent_money.create', compact('finance', 'categories', 'availableMoneys', 'diff', 'payments', 'formName', 'actionUrl', 'method'));
     }
 
     public function update(Request $request, $id)
@@ -167,7 +192,7 @@ class FinanceController extends Controller
 
     public function search(Request $request)
     {
-        $carbon = new Carbon();
+        $carbon = $this->carbon;
         $search = $request->input('search');
         $filters = $request->except('_token');
 
