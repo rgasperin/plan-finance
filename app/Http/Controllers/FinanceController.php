@@ -138,7 +138,7 @@ class FinanceController extends Controller
 
         $date = Carbon::parse($finance->date)->format('d/m/Y');
 
-        $financeValue = $finance->value;
+        $financeValue = $finance->sum('value');
         $moneySpend = $availableMoney->sum('to_spend');
 
         $diff = $moneySpend - $financeValue;
