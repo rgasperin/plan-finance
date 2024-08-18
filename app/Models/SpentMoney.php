@@ -16,6 +16,7 @@ class SpentMoney extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     protected $fillable = [
+        'user_id',
         'available_money_id',
         'categories_id',
         'payments_id',
@@ -28,6 +29,11 @@ class SpentMoney extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function relCategory()
     {

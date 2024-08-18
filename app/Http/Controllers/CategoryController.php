@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,9 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = $this->objCategory->paginate(5);
+        $categories = $this->objCategory
+            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->paginate(5);
 
         return view('categories.index', compact('categories'));
     }
@@ -35,6 +38,7 @@ class CategoryController extends Controller
         ]);
 
         $category = $this->objCategory->create([
+            'user_id' => Auth::id(), // Define o user_id
             'name' => $request->name,
             'color' => $request->color,
         ]);
@@ -45,14 +49,18 @@ class CategoryController extends Controller
 
     public function edit(string $id)
     {
-        $category = $this->objCategory->find($id);
+        $category = $this->objCategory
+            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->findOrFail($id);
 
         return view('categories.create', compact('category'));
     }
 
     public function update(Request $request, string $id)
     {
-        $category = Category::findOrFail($id);
+        $category = $this->objCategory
+            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->findOrFail($id);
 
         $category->name = $request->name;
         $category->color = $request->color;
@@ -64,7 +72,9 @@ class CategoryController extends Controller
 
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
+        $category = $this->objCategory
+            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->findOrFail($id);
 
         $category->delete();
 
@@ -75,7 +85,9 @@ class CategoryController extends Controller
     {
         $filters = $request->except('_token');
 
-        $categories = $this->objCategory->where('name', 'like', '%' . $request->search . '%')->paginate(5);
+        $categories = $this->objCategory
+            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('name', 'like', '%' . $request->search . '%')->paginate(5);
 
         return view('categories.index', compact('categories', 'filters'));
     }

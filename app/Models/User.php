@@ -41,4 +41,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function relSpentMoney()
+    {
+        return $this->hasMany(SpentMoney::class);
+    }
+
+    public function relCategory()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function relAvailableMoney()
+    {
+        return $this->hasMany(AvailableMoney::class);
+    }
 }
