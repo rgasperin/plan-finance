@@ -169,3 +169,21 @@ tr {
     font-weight: 600;
     color: #0f0f0f !important;
 }
+
+.bg-error {
+    margin-top: 5px;
+}
+
+.text-error {
+    font-size: 14px;
+}
+
+.bg-container-login {
+    height: 100vh;
+}
+
+.bg-card-login {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+}

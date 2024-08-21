@@ -20,9 +20,15 @@ class AvailableMoneyController extends Controller
     {
         $carbon = new Carbon();
 
+        $currentMonth = $carbon->month;
+        $currentYear = $carbon->year;
+
         $availableMoneys = $this->objAvailableMoney
-            ->where('user_id', Auth::id()) // Filtra por user_id
-            ->paginate(5);
+            ->where('user_id', Auth::id())
+            ->whereMonth('date', $currentMonth)
+            ->whereYear('date', $currentYear)
+            ->orderBy('date', 'desc')
+            ->paginate(6);
 
         $availableMoneys->each(function ($availableMoney) {
             $availableMoney->formatted_date = Carbon::parse($availableMoney->date)->format('d/m/Y');
@@ -60,12 +66,14 @@ class AvailableMoneyController extends Controller
             'date.required' => 'O campo DATA é obrigatorio!',
         ]);
 
-        $this->objAvailableMoney->create([
-            'user_id' => Auth::id(), // Define o user_id
+        $availableMoney = $this->objAvailableMoney->create([
+            'user_id' => Auth::id(),
             'name' => $request->name,
             'to_spend' => $request->to_spend,
             'date' => $request->date,
         ]);
+
+        $availableMoney->save();
 
         return redirect('entrada')->with('success', "Entrada adicionada!");
     }
@@ -76,7 +84,7 @@ class AvailableMoneyController extends Controller
     public function edit(string $id)
     {
         $availableMoney = $this->objAvailableMoney
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         $formName = 'formEdit';
@@ -92,7 +100,7 @@ class AvailableMoneyController extends Controller
     public function update(Request $request, string $id)
     {
         $availableMoney = $this->objAvailableMoney
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         $availableMoney->name = $request->name;
@@ -110,7 +118,7 @@ class AvailableMoneyController extends Controller
     public function destroy(string $id)
     {
         $availableMoney = $this->objAvailableMoney
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         $availableMoney->delete();
@@ -125,7 +133,7 @@ class AvailableMoneyController extends Controller
         $filters = $request->except('_token');
 
         $availableMoneys = $this->objAvailableMoney
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->where('name', 'like', '%' . $request->search . '%')
             ->orWhere('to_spend', 'like', '%' . $request->search . '%')
             ->paginate(5);
