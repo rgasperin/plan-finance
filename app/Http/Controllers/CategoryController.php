@@ -18,8 +18,8 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->objCategory
-            ->where('user_id', Auth::id()) // Filtra por user_id
-            ->paginate(5);
+            ->where('user_id', Auth::id())
+            ->paginate(6);
 
         return view('categories.index', compact('categories'));
     }
@@ -38,7 +38,7 @@ class CategoryController extends Controller
         ]);
 
         $category = $this->objCategory->create([
-            'user_id' => Auth::id(), // Define o user_id
+            'user_id' => Auth::id(),
             'name' => $request->name,
             'color' => $request->color,
         ]);
@@ -50,7 +50,7 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $category = $this->objCategory
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         return view('categories.create', compact('category'));
@@ -59,7 +59,7 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $category = $this->objCategory
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         $category->name = $request->name;
@@ -73,7 +73,7 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         $category = $this->objCategory
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         $category->delete();
@@ -86,7 +86,7 @@ class CategoryController extends Controller
         $filters = $request->except('_token');
 
         $categories = $this->objCategory
-            ->where('user_id', Auth::id()) // Filtra por user_id
+            ->where('user_id', Auth::id())
             ->where('name', 'like', '%' . $request->search . '%')->paginate(5);
 
         return view('categories.index', compact('categories', 'filters'));

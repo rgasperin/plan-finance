@@ -88,8 +88,8 @@
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
                                     <span class="profile-username">
-                                        <span class="op-7">Meu</span>
-                                        <span class="fw-bold">Perfil</span>
+                                        <span class="op-7">Oi, </span>
+                                        <span class="fw-bold">{{ auth()->user()->name }}</span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">

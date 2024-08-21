@@ -20,19 +20,15 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ], [
-            'email.required' => 'Esse campo de email é obrigatório',
-            'email.email' => 'Esse campo tem que ter um email válido',
-            'password.required' => 'Esse campo password é obrigatório',
+            'email.required' => 'Esse campo de email é obrigatório.',
+            'email.email' => 'Esse campo tem que ter um email válido.',
+            'password.required' => 'Esse campo password é obrigatório.',
         ]);
 
         $user = User::where('email', $request->input('email'))->first();
 
-        if (!$user) {
-            return redirect('login')->with('error', 'E-mail ou senha invalidos!');
-        }
-
         if (!$user || !Hash::check($request->input('password'), $user->password)) {
-            return redirect('login')->withErrors(['error' => 'E-mail ou senha inválidos!']);
+            return redirect('login')->with('error', 'E-mail ou senha inválidos!');
         }
 
         Auth::loginUsingId($user->id);

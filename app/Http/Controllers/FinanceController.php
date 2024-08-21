@@ -33,16 +33,19 @@ class FinanceController extends Controller
         $currentYear = $this->carbon->year;
 
         $finances = $this->objSpentMoney
-            ->where('user_id', Auth::id()) // Filtra por usuário autenticado
+            ->where('user_id', Auth::id())
             ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
-            ->paginate(4);
+            ->orderBy('date', 'desc')
+            ->paginate(6);
 
         $finances->each(function ($finance) {
             $finance->formatted_date = Carbon::parse($finance->date)->format('d/m/Y');
         });
 
-        $available_moneys = $this->objAvailableMoney->where('user_id', Auth::id())->paginate(4);
+        $available_moneys = $this->objAvailableMoney
+            ->where('user_id', Auth::id())
+            ->paginate(6);
 
         return view('index', compact('finances', 'available_moneys'));
     }
@@ -53,9 +56,10 @@ class FinanceController extends Controller
         $currentYear = $this->carbon->year;
 
         $finances = $this->objSpentMoney
-            ->where('user_id', Auth::id()) // Filtra por usuário autenticado
+            ->where('user_id', Auth::id())
             ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
+            ->orderBy('date', 'desc')
             ->paginate(6);
 
         $finances->each(function ($finance) {
@@ -64,7 +68,9 @@ class FinanceController extends Controller
             $finance->formatted_date = Carbon::parse($finance->date)->format('d/m/Y');
         });
 
-        $availableMoney = $this->objAvailableMoney->where('user_id', Auth::id())->get();
+        $availableMoney = $this->objAvailableMoney
+            ->where('user_id', Auth::id())
+            ->get();
 
         $financeValue = $finances->sum('value');
         $moneySpend = $availableMoney->sum('to_spend');
@@ -82,11 +88,19 @@ class FinanceController extends Controller
 
         $date = Carbon::now();
 
-        $finances = $this->objSpentMoney->all();
+        $finances = $this->objSpentMoney
+            ->where('user_id', Auth::id())
+            ->get();
 
-        $categories = $this->objCategory->all();
+        $availableMoneys = $this->objAvailableMoney
+            ->where('user_id', Auth::id())
+            ->get();
+
+        $categories = $this->objCategory
+            ->where('user_id', Auth::id())
+            ->get();
+
         $payments = $this->objPayment->all();
-        $availableMoneys = $this->objAvailableMoney->all();
 
         $financeValue = $finances->sum('value');
         $moneySpend = $availableMoneys->sum('to_spend');
@@ -115,7 +129,7 @@ class FinanceController extends Controller
         $payable = $request->has('payable') ? 1 : 0;
 
         $this->objSpentMoney->create([
-            'user_id' => Auth::id(), // Adiciona o ID do usuário autenticado
+            'user_id' => Auth::id(),
             'available_money_id' => $request->available_money_id,
             'categories_id' => $request->categories_id,
             'payments_id' => $request->payments_id ?? null,
@@ -131,7 +145,9 @@ class FinanceController extends Controller
 
     public function showModal($id)
     {
-        $finance = $this->objSpentMoney->where('user_id', Auth::id())->findOrFail($id);
+        $finance = $this->objSpentMoney
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
 
         $availableMoney = $finance->relAvailableMoney;
         $category = $finance->relCategory;
@@ -148,13 +164,22 @@ class FinanceController extends Controller
 
     public function edit($id)
     {
-        $finance = $this->objSpentMoney->where('user_id', Auth::id())->find($id);
+        $finance = $this->objSpentMoney
+            ->where('user_id', Auth::id())
+            ->find($id);
+
         $formName = 'formEdit';
         $actionUrl = url('despesa/' . $finance->id);
         $method = 'PUT';
 
-        $categories = $this->objCategory->all();
-        $availableMoneys = $this->objAvailableMoney->where('user_id', Auth::id())->get();
+        $categories = $this->objCategory
+            ->where('user_id', Auth::id())
+            ->get();
+
+        $availableMoneys = $this->objAvailableMoney
+            ->where('user_id', Auth::id())
+            ->get();
+
         $payments = $this->objPayment->all();
 
         $financeValue = $finance->sum('value');
@@ -187,7 +212,10 @@ class FinanceController extends Controller
 
     public function destroy($id)
     {
-        $finance = $this->objSpentMoney->where('user_id', Auth::id())->findOrFail($id);
+        $finance = $this->objSpentMoney
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
         $finance->delete();
 
         return redirect('despesa')->with('success', "Despesa deletada!");
@@ -200,7 +228,7 @@ class FinanceController extends Controller
         $filters = $request->except('_token');
 
         $finances = $this->objSpentMoney->where('name', 'like', '%' . $search . '%')
-            ->where('user_id', Auth::id()) // Filtra por usuário autenticado
+            ->where('user_id', Auth::id())
             ->orWhereHas('relCategory', function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })->orWhere('value', 'like', '%' . $search . '%')

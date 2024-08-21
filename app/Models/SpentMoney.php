@@ -30,6 +30,13 @@ class SpentMoney extends Model
         'deleted_at',
     ];
 
+    public function setToSpendAttribute($value)
+    {
+        $cleanValue = preg_replace('/[^\d.]/', '', str_replace(',', '.', $value));
+
+        $this->attributes['value'] = (double) $cleanValue;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

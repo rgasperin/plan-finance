@@ -14,16 +14,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url('assets/dist/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/dist/uicons/css/uicons-regular-rounded.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/dist/uicons-solid/css/uicons-solid-straight.css') }}">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-    <link rel="stylesheet" href="{{ url('assets/vendor/ckeditor5.css') }}">
-
-    <link rel="stylesheet" href="{{ url('assets/css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('assets/dist/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('assets/css/kaiadmin.min.css') }}" />
     <link rel="stylesheet" href="{{ url('assets/css/styles.css') }}">
 
@@ -40,65 +34,45 @@
             <div class="card-body">
                 <form action="{{ url('register') }}" method="POST">
                     @csrf
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
                     <div class="form-group">
                         <label for="name">Nome:</label>
                         <input type="text" name="name" id="name" class="form-control" required>
+                        @error('name')
+                            <div class="bg-error">
+                                <p class="text-danger text-error">{{ $message }}</p>
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
                         <input type="email" name="email" id="email" class="form-control" required>
+                        @error('email')
+                            <div class="bg-error">
+                                <p class="text-danger text-error">{{ $message }}</p>
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="password">Senha:</label>
                         <input type="password" name="password" id="password" class="form-control" required>
                         <small class="form-text text-muted">A senha deve ter mais de 8 caracteres.</small>
+                        @error('password')
+                            <div class="bg-error">
+                                <p class="text-danger text-error">{{ $message }}</p>
+                            </div>
+                        @enderror
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
+                        <button type="submit" class="btn btn-primary mt-4">Registrar</button>
                     </div>
                 </form>
-
-                @if (session('success'))
-                    <div class="alert alert-success mt-3">
-                        {{ session('success') }}
-                    </div>
-                @endif
             </div>
         </div>
     </div>
 
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
-    <script src="{{ asset('assets/dist/js/jquery_mask.js') }}"></script>
-    <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
-
-    <script src="{{ asset('assets/dist/bootstrap/js/bootstrap.min.js') }}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
-    <script src="{{ asset('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugin/chart.js/chart.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugin/chart-circle/circles.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugin/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugin/jsvectormap/world.js') }}"></script>
     <script src="{{ asset('assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
-
-    <script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>
-
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
 
     <script>
