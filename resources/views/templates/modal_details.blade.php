@@ -11,7 +11,7 @@
 <div class="row mt-3">
     <div class="col-lg-4">
         <p class="margin-show">Valor</p>
-        <input class="form-control" value="R$ {{ number_format($finance->value, 2, '.', ',') ?? '' }}" disabled>
+        <input class="form-control" value="R$ {{ number_format($finance->value, 2, ',', '.') ?? '' }}" disabled>
     </div>
     <div class="col-lg-4">
         <p class="margin-show">Selecione uma data:</p>
@@ -19,7 +19,7 @@
     </div>
     <div class="col-lg-4">
         <p class="margin-show">Saldo disponível</p>
-        <input class="form-control" value="R$ {{ number_format($diff, 2, '.', ',') }}" disabled>
+        <input class="form-control" value="R$ {{ number_format($diff, 2, ',', '.') }}" disabled>
     </div>
 </div>
 <div class="row mt-3">
