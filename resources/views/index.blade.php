@@ -29,7 +29,7 @@
                                                 <p class="mt-3"> {{ $finance->name }}</p>
                                             </td>
                                             <td class="padding-table">
-                                                <p class="mt-3"> R$ {{ number_format($finance->value, 2, '.', ',') }} </p>
+                                                <p class="mt-3"> R$ {{ number_format($finance->value, 2, ',', '.') }} </p>
                                             </td>
                                             <td class="padding-table">
                                                 <p class="mt-3"> {{ $finance->formatted_date }} </p>
@@ -57,7 +57,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($finances->isEmpty())
+                                @if ($available_moneys->isEmpty())
                                     <table>
                                         <p class="text-center">Nenhum resultaho encontrado!</p>
                                     </table>
@@ -69,7 +69,7 @@
                                             </td>
                                             <td class="padding-table">
                                                 <p class="mt-3"> R$
-                                                    {{ number_format($available_money->to_spend, 2, '.', ',') }} </p>
+                                                    {{ number_format($available_money->to_spend, 2, ',', '.') }}</p>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -27,7 +27,7 @@ class AvailableMoney extends Model
 
     public function setToSpendAttribute($value)
     {
-        $cleanValue = preg_replace('/[^\d.]/', '', str_replace(',', '.', $value));
+        $cleanValue = preg_replace('/[^\d.]/', '', str_replace('.', ',', $value));
 
         $this->attributes['to_spend'] = (double) $cleanValue;
     }

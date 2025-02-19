@@ -10,7 +10,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-6 d-flex justify-content-center mt-3">
-                    <p class="text-center">Orçamento mensal: R$ {{ number_format($diff, 2, '.', ',') }}</p>
+                    <p class="text-center">Orçamento mensal: R$ {{ number_format($diff, 2, ',', '.') }}</p>
                 </div>
                 <div class="col-lg-6">
                     <div class="d-flex justify-content-end">
@@ -62,7 +62,7 @@
                                                 </div>
                                             </td>
                                             <td class="padding-table">
-                                                <p class="mt-3"> R$ {{ number_format($finance->value, 2, '.', ',') }} </p>
+                                                <p class="mt-3"> R$ {{ number_format($finance->value, 2, ',', '.') }} </p>
                                             </td>
                                             <td class="padding-table">
                                                 <p class="mt-3"> {{ $finance->formatted_date }} </p>

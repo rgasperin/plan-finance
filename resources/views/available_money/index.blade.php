@@ -49,7 +49,7 @@
                                             </td>
                                             <td class="padding-table">
                                                 <p class="mt-3">
-                                                    R$ {{ number_format($availableMoney->to_spend, 2, '.') }}
+                                                    R$ {{ number_format($availableMoney->to_spend, 2, ',', '.') }}
                                                 </p>
                                             </td>
                                             <td class="padding-table">
