@@ -60,7 +60,7 @@ class FinanceController extends Controller
             ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
             ->orderBy('date', 'desc')
-            ->paginate(6);
+            ->paginate(2);
 
         $finances->each(function ($finance) {
             $finance->category = $finance->relCategory;
