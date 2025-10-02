@@ -55,12 +55,19 @@ class FinanceController extends Controller
         $currentMonth = $this->carbon->month;
         $currentYear = $this->carbon->year;
 
+            // Recupera todos os gastos do mês sem paginação
+        $totalFinanceValue = $this->objSpentMoney
+        ->where('user_id', Auth::id())
+        ->whereMonth('date', $currentMonth)
+        ->whereYear('date', $currentYear)
+        ->sum('value'); // Soma todos os gastos do mês
+
         $finances = $this->objSpentMoney
             ->where('user_id', Auth::id())
             ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
             ->orderBy('date', 'desc')
-            ->paginate(6);
+            ->paginate(2);
 
         $finances->each(function ($finance) {
             $finance->category = $finance->relCategory;
@@ -72,10 +79,12 @@ class FinanceController extends Controller
             ->where('user_id', Auth::id())
             ->get();
 
-        $financeValue = $finances->sum('value');
+        // $financeValue = $finances->sum('value');
+        // $moneySpend = $availableMoney->sum('to_spend');
         $moneySpend = $availableMoney->sum('to_spend');
+        $diff = $moneySpend - $totalFinanceValue; // Usa a soma correta
 
-        $diff = $moneySpend - $financeValue;
+        // $diff = $moneySpend - $financeValue;
 
         return view('spent_money.index', compact('finances', 'availableMoney', 'diff'));
     }
