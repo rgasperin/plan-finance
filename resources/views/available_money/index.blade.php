@@ -57,7 +57,7 @@
                                             </td>
 
                                             <td class="padding-table">
-                                                <div class="mt-3 d-flex justify-content-end ">
+                                                <div class="mt-3 d-flex justiSisRepo@580fy-content-end ">
                                                     <a class="text-decoration-none"
                                                         href="{{ url('entrada/' . $availableMoney->id) . '/edit' }}">
                                                         <button class="btn btn-secondary btn-view">

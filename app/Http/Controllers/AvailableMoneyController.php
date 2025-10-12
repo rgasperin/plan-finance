@@ -25,10 +25,10 @@ class AvailableMoneyController extends Controller
 
         $availableMoneys = $this->objAvailableMoney
             ->where('user_id', Auth::id())
-            ->whereMonth('date', $currentMonth)
+            // ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
             ->orderBy('date', 'desc')
-            ->paginate(6);
+            ->paginate(10);
 
         $availableMoneys->each(function ($availableMoney) {
             $availableMoney->formatted_date = Carbon::parse($availableMoney->date)->format('d/m/Y');
@@ -127,17 +127,23 @@ class AvailableMoneyController extends Controller
     }
 
     public function search(Request $request)
-    {
-        $carbon = new Carbon();
+{
+    $carbon = new Carbon();
+    $filters = $request->except('_token');
 
-        $filters = $request->except('_token');
+    $availableMoneys = $this->objAvailableMoney
+        ->where('user_id', Auth::id())
+        ->where(function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('to_spend', 'like', '%' . $request->search . '%');
+        })
+        ->orderBy('date', 'desc')
+        ->paginate(6);
 
-        $availableMoneys = $this->objAvailableMoney
-            ->where('user_id', Auth::id())
-            ->where('name', 'like', '%' . $request->search . '%')
-            ->orWhere('to_spend', 'like', '%' . $request->search . '%')
-            ->paginate(5);
+    $availableMoneys->each(function ($availableMoney) {
+        $availableMoney->formatted_date = Carbon::parse($availableMoney->date)->format('d/m/Y');
+    });
 
-        return view('available_money.index', compact('availableMoneys', 'filters', 'carbon'));
-    }
+    return view('available_money.index', compact('availableMoneys', 'filters', 'carbon'));
+}
 }

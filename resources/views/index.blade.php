@@ -5,11 +5,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="card p-0">
+                    <div class="card p-0 border-5 border-left-red">
                         <div class="m-2">
                             <h1 class="text-center">Despesas</h1>
                         </div>
-                        <table class="table table-bg ">
+                        <table class="table table-bg border-1">
                             <thead class="table-dark-bg">
                                 <tr>
                                     <th class="padding-card">Nome</th>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card p-0">
+                    <div class="card p-0 border-5 border-left-green">
                         <div class="m-2">
                             <h1 class="text-center">Entradas</h1>
                         </div>

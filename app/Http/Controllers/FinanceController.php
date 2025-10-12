@@ -34,10 +34,10 @@ class FinanceController extends Controller
 
         $finances = $this->objSpentMoney
             ->where('user_id', Auth::id())
-            ->whereMonth('date', $currentMonth)
+            // ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
             ->orderBy('date', 'desc')
-            ->paginate(6);
+            ->paginate(10);
 
         $finances->each(function ($finance) {
             $finance->formatted_date = Carbon::parse($finance->date)->format('d/m/Y');
@@ -58,16 +58,16 @@ class FinanceController extends Controller
             // Recupera todos os gastos do mês sem paginação
         $totalFinanceValue = $this->objSpentMoney
         ->where('user_id', Auth::id())
-        ->whereMonth('date', $currentMonth)
+        // ->whereMonth('date', $currentMonth)
         ->whereYear('date', $currentYear)
         ->sum('value'); // Soma todos os gastos do mês
 
         $finances = $this->objSpentMoney
             ->where('user_id', Auth::id())
-            ->whereMonth('date', $currentMonth)
+            // ->whereMonth('date', $currentMonth)
             ->whereYear('date', $currentYear)
             ->orderBy('date', 'desc')
-            ->paginate(2);
+            ->paginate(15);
 
         $finances->each(function ($finance) {
             $finance->category = $finance->relCategory;
